@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b12">
+<meta name="description" content="AI WORKER FREE - studio de planificare pentru animații AI">
+<link rel="manifest" href="manifest.json">
+<title>AI WORKER FREE</title>
+<style>
+:root{--bg:#080b12;--panel:#111827;--panel2:#172235;--line:#263449;--txt:#f8fafc;--muted:#94a3b8;--blue:#60a5fa;--green:#34d399;--amber:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:18px 18px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#080b12f2;backdrop-filter:blur(12px);z-index:2}
+.brand{font-weight:900;letter-spacing:1.8px;font-size:19px}.sub{color:var(--muted);font-size:9px;letter-spacing:1.5px}
+main{padding:16px 16px 96px;max-width:760px;margin:auto}.hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px}
+.eyebrow{font-size:10px;color:var(--blue);font-weight:800;letter-spacing:1.4px}.hero h1{font-size:30px;line-height:1.12;margin:14px 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.5}
+button,.btn{border:0;border-radius:12px;padding:13px 15px;background:var(--blue);color:#07111f;font-weight:900;font-size:12px;cursor:pointer}
+button.secondary{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+button:disabled{opacity:.5}.full{width:100%;margin-top:10px}
+.row{display:flex;gap:9px;align-items:center;justify-content:space-between}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 22px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px}.num{font-size:22px;font-weight:900}.small{font-size:10px;color:var(--muted)}
+h2{font-size:16px;margin:20px 0 10px}.field{margin:13px 0}.field label{display:block;color:var(--muted);font-size:11px;font-weight:800;margin-bottom:7px}
+input,select,textarea{width:100%;background:#0b1220;border:1px solid var(--line);color:var(--txt);border-radius:11px;padding:13px;font:inherit;font-size:13px}
+textarea{min-height:84px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pill{font-size:10px;color:var(--green);border:1px solid #34d39966;background:#34d39918;padding:5px 9px;border-radius:20px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0d1420f5;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:3}
+.nav button{background:transparent;color:var(--muted);padding:7px 5px;font-size:10px;flex:1}.nav button.active{color:var(--blue)}
+.scene{padding:12px 0;border-bottom:1px solid var(--line)}.scene:last-child{border:0}.scene strong{font-size:12px}.scene p{font-size:12px;line-height:1.5;color:#cbd5e1;margin:6px 0}
+.note{border:1px solid #6b4e1d;background:#251e11;border-radius:12px;padding:12px;color:#fbbf24;font-size:11px;line-height:1.5;margin-top:12px}
+.hidden{display:none!important}.tag{font-size:10px;color:var(--muted)}.empty{color:var(--muted);text-align:center;padding:24px 8px;font-size:13px}
+</style>
+</head>
+<body>
+<header><div><div class="brand">AI WORKER <span style="color:#60a5fa">●</span></div><div class="sub">FREE ANIMATION STUDIO</div></div><span class="pill">LOCAL MODE</span></header>
+<main>
+<section id="home">
+ <div class="hero"><div class="eyebrow">CENTRU DE COMANDĂ</div><h1>Studioul tău de<br>animație AI.</h1><p class="muted">Planifică episoade de 5–10 minute, personaje recurente și scene pentru canalele tale.</p><button class="full" onclick="show('create')">＋ CREEAZĂ UN EPISOD</button><div class="note">Această ediție este un prototip offline: planifică și salvează proiecte pe telefon. Nu generează încă fișiere video și nu rulează un agent cloud 24/7.</div></div>
+ <div class="stats"><div class="stat"><div class="num" id="countProjects">0</div><div class="small">EPISOADE</div></div><div class="stat"><div class="num" id="countScenes">0</div><div class="small">SCENE</div></div><div class="stat"><div class="num">0 lei</div><div class="small">COSTUL APLICAȚIEI</div></div></div>
+ <h2>Proiectele mele</h2><div id="recent"></div>
+ <h2>Echipa de producție</h2>
+ <div class="card"><div class="row"><strong>Story Writer</strong><span class="tag">Planificare scenariu</span></div><p class="muted">Transformă ideea într-un episod cu început, conflict și final.</p></div>
+ <div class="card"><div class="row"><strong>Character Keeper</strong><span class="tag">Continuitate</span></div><p class="muted">Păstrează descrierile personajelor pentru episoade viitoare.</p></div>
+ <div class="card"><div class="row"><strong>Scene Planner</strong><span class="tag">Storyboard</span></div><p class="muted">Împarte episodul în scene și indicații vizuale.</p></div>
+</section>
+<section id="create" class="hidden">
+ <h1>Creare episod</h1><p class="muted">Completează ideea și generează un plan de producție pentru un episod de 5–10 minute.</p>
+ <div class="field"><label>TITLUL / IDEEA EPISODULUI</label><input id="title" placeholder="Ex.: Riko și pădurea luminilor"></div>
+ <div class="field"><label>PERSONAJ PRINCIPAL</label><input id="character" value="Riko, vulpe portocalie cu piept alb, ochi mari căprui-ambra, eșarfă roșie și pandantiv cu lăbuță"></div>
+ <div class="grid"><div class="field"><label>DURATĂ</label><select id="duration"><option value="5">5 minute</option><option value="7" selected>7 minute</option><option value="10">10 minute</option></select></div><div class="field"><label>LIMBĂ</label><select id="language"><option>Română</option><option>Engleză</option></select></div></div>
+ <div class="field"><label>PUBLIC</label><select id="audience"><option>Copii 3–6 ani</option><option>Copii 6–9 ani</option><option>Familie</option></select></div>
+ <div class="field"><label>MESAJUL / ÎNVĂȚĂTURA</label><input id="lesson" placeholder="Ex.: curajul și prietenia"></div>
+ <div class="field"><label>DESCRIEREA IDEII</label><textarea id="idea" placeholder="Ce se întâmplă în episod?"></textarea></div>
+ <button class="full" onclick="generate()">✦ GENEREAZĂ PLANUL EPISODULUI</button>
+ <div id="generated" class="hidden"></div>
+</section>
+<section id="projects" class="hidden"><h1>Episoade salvate</h1><div id="projectList"></div></section>
+<section id="characterPage" class="hidden"><h1>Personaje</h1><div class="card"><span class="pill">PERSONAJ PRINCIPAL</span><h2>Riko</h2><p class="muted">Vulpe portocalie, piept alb, ochi mari căprui-ambra, eșarfă roșie și pandantiv cu amprentă de lăbuță. Personalitate: curajos, vesel și isteț.</p><p class="muted">Regulă de continuitate: păstrează aceeași culoare, îmbrăcăminte, proporții și accesorii în fiecare scenă.</p></div><div class="card"><h2>Adaugă personaj</h2><div class="field"><label>NUME</label><input id="newName" placeholder="Numele personajului"></div><div class="field"><label>DESCRIERE VIZUALĂ</label><textarea id="newDesc" placeholder="Culori, haine, accesorii, aspect..."></textarea></div><button class="full" onclick="addCharacter()">SALVEAZĂ PERSONAJUL</button></div><div id="characters"></div></section>
+</main>
+<nav class="nav"><button class="active" data-page="home" onclick="show('home')">⌂<br>Acasă</button><button data-page="create" onclick="show('create')">✦<br>Creare</button><button data-page="projects" onclick="show('projects')">▤<br>Episoade</button><button data-page="characterPage" onclick="show('characterPage')">♙<br>Personaje</button></nav>
+<script>
+const $=id=>document.getElementById(id);
+let projects=JSON.parse(localStorage.getItem('aw_projects')||'[]');
+let characters=JSON.parse(localStorage.getItem('aw_characters')||'[]');
+function persist(){localStorage.setItem('aw_projects',JSON.stringify(projects));localStorage.setItem('aw_characters',JSON.stringify(characters));refresh()}
+function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='projects')renderProjects();if(id==='home')refresh();if(id==='characterPage')renderCharacters()}
+function refresh(){$('countProjects').textContent=projects.length;$('countScenes').textContent=projects.reduce((a,p)=>a+p.scenes.length,0);$('recent').innerHTML=projects.length?projects.slice(0,3).map(p=>`<div class="card"><strong>${esc(p.title)}</strong><p class="muted">${p.duration} min · ${p.scenes.length} scene · ${esc(p.date)}</p></div>`).join(''):'<div class="empty">Încă nu ai episoade. Creează primul proiect.</div>'}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function generate(){
+ const title=$('title').value.trim(), character=$('character').value.trim(), duration=Number($('duration').value), lesson=$('lesson').value.trim()||'prietenia și curajul', idea=$('idea').value.trim()||'Personajul pornește într-o aventură, întâlnește o problemă și găsește o soluție.';
+ if(!title){alert('Scrie un titlu pentru episod.');return}
+ const count=Math.ceil(duration*60/14), scenes=[];
+ const beats=[
+ ['Introducere','Prezintă locul, atmosfera și personajul.','Cadru larg, lumină caldă, mișcare lentă a camerei.'],
+ ['Descoperirea','Personajul observă un indiciu neașteptat.','Prim-plan pe expresia personajului și obiectul misterios.'],
+ ['Întrebarea','Apare întrebarea care pornește aventura.','Personajul privește în jur; fundalul dezvăluie noul loc.'],
+ ['Încercarea','Personajul încearcă prima soluție.','Acțiune clară, gesturi expresive, fără schimbarea designului.'],
+ ['Obstacolul','Ceva nu merge conform planului.','Cadru mediu, reacție emoțională ușor de înțeles.'],
+ ['Ajutorul','Un prieten sau un indiciu oferă o perspectivă nouă.','Două personaje în cadru, dialog și reacții.'],
+ ['A doua încercare','Personajul aplică ce a învățat.','Montaj de acțiuni scurte, mișcare fluidă.'],
+ ['Rezolvarea','Problema este rezolvată prin cooperare și curaj.','Cadru luminos, expresii pozitive.'],
+ ['Concluzia','Se explică pe scurt învățătura episodului.','Prim-plan calm, personajul vorbește către public.'],
+ ['Finalul','Încheiere veselă și invitație la următorul episod.','Cadru final memorabil, personajele salută.']
+ ];
+ for(let i=0;i<count;i++){const b=beats[Math.min(9,Math.floor(i/count*10))];scenes.push({n:i+1,part:b[0],action:`${b[1]} Context: ${idea}`,visual:b[2],seconds:14})}
+ const p={id:Date.now(),title,character,duration,lesson,idea,language:$('language').value,audience:$('audience').value,date:new Date().toLocaleDateString('ro-RO'),scenes};
+ projects.unshift(p);persist();renderGenerated(p)
+}
+function renderGenerated(p){
+ $('generated').classList.remove('hidden');
+ $('generated').innerHTML=`<div class="card"><div class="row"><strong>${esc(p.title)}</strong><span class="pill">PLAN CREAT</span></div><p class="muted">${p.duration} minute · ${p.scenes.length} scene · ${esc(p.language)}</p><p class="muted"><b>Personaj:</b> ${esc(p.character)}</p><p class="muted"><b>Mesaj:</b> ${esc(p.lesson)}</p><button class="full" onclick="copyProject(${p.id})">COPIAZĂ PLANUL COMPLET</button><button class="full secondary" onclick="downloadProject(${p.id})">EXPORTĂ CA FIȘIER TEXT</button></div><h2>Storyboard</h2>${p.scenes.map(s=>`<div class="scene"><strong>Scena ${s.n} · ${s.part} · ${s.seconds} sec.</strong><p>${esc(s.action)}</p><p><span class="tag">INDICAȚIE VIZUALĂ</span><br>${esc(s.visual)}</p></div>`).join('')}<div class="note">Acesta este un storyboard de pornire, nu un videoclip randat. Pentru animație finală sunt necesare instrumente de generare video sau software de animație.</div>`;
+}
+function projectText(p){return `${p.title}\nDurată: ${p.duration} minute\nPublic: ${p.audience}\nLimbă: ${p.language}\nPersonaj: ${p.character}\nMesaj: ${p.lesson}\nIdee: ${p.idea}\n\n${p.scenes.map(s=>`SCENA ${s.n} (${s.seconds}s) - ${s.part}\nAcțiune: ${s.action}\nVizual: ${s.visual}`).join('\n\n')}`}
+async function copyProject(id){const p=projects.find(x=>x.id===id);try{await navigator.clipboard.writeText(projectText(p));alert('Planul a fost copiat.')}catch(e){alert('Copierea nu este disponibilă în acest browser. Folosește exportul text.')}}
+function downloadProject(id){const p=projects.find(x=>x.id===id),blob=new Blob([projectText(p)],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='AI-WORKER-'+p.title.replace(/[^a-z0-9]/gi,'-')+'.txt';a.click();URL.revokeObjectURL(a.href)}
+function renderProjects(){$('projectList').innerHTML=projects.length?projects.map(p=>`<div class="card"><div class="row"><strong>${esc(p.title)}</strong><span class="tag">${p.duration} min</span></div><p class="muted">${p.scenes.length} scene · ${esc(p.date)}</p><button class="secondary" onclick="openProject(${p.id})">DESCHIDE</button> <button class="secondary" onclick="deleteProject(${p.id})">ȘTERGE</button></div>`).join(''):'<div class="empty">Nu ai salvat încă niciun episod.</div>'}
+function openProject(id){const p=projects.find(x=>x.id===id);show('create');renderGenerated(p)}
+function deleteProject(id){if(confirm('Ștergi episodul?')){projects=projects.filter(p=>p.id!==id);persist();renderProjects()}}
+function addCharacter(){const n=$('newName').value.trim(),d=$('newDesc').value.trim();if(!n||!d){alert('Completează numele și descrierea.');return}characters.push({n,d});$('newName').value='';$('newDesc').value='';persist();renderCharacters()}
+function renderCharacters(){$('characters').innerHTML=characters.map(c=>`<div class="card"><strong>${esc(c.n)}</strong><p class="muted">${esc(c.d)}</p></div>`).join('')}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+refresh();
+</script>
+</body></html>
